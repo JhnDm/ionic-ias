@@ -64,7 +64,7 @@ const Login = () => {
             onIonChange={(e) => setPassword(e.detail.value!)}
             className="login-input"
           />
-          <IonButton onClick={handleLogin} className="login-button">Log in</IonButton>
+          <IonButton onClick={handleLogin} className="login-button">LOGIN</IonButton>
           <IonButton onClick={goToRegister} className="register-button" fill="clear">
             Create Account
           </IonButton>

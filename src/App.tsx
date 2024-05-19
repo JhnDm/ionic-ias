@@ -5,7 +5,7 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import Login from './pages/login/login';
-import Register from './pages/login/register/register';
+import Register from './pages/register/register'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
