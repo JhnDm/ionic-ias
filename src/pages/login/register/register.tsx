@@ -1,13 +1,11 @@
-// Login.tsx
+// Register.tsx
 
 import React, { useState } from 'react';
 import { IonContent, IonPage, IonInput, IonButton, IonLoading, IonHeader, IonToolbar, IonTitle } from '@ionic/react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { Router, useHistory } from 'react-router-dom';
-import { useIonRouter } from '@ionic/react';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
-import '../login/login.css';
+import './register.css'; // Import CSS file
 
 const firebaseConfig = {
   apiKey: "AIzaSyAfME1q9QAVkcb7E8KJ4qMiKjDtN7HDwjw",
@@ -22,52 +20,46 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
-const Login = () => {
-  const router = useIonRouter(); // Initialize useIonRouter hook
+const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
+      // Handle successful registration (e.g., redirect to login or home page)
     } catch (error) {
       console.error(error);
     }
     setLoading(false);
-  };
-  const goToRegister = () => {
-    router.push('/register'); // Navigate to the register page
   };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar className="toolbar-skyblue">
-          <IonTitle>Login</IonTitle>
+          <IonTitle>Register</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="login-container">
+        <div className="register-container">
           <IonInput
             type="email"
             placeholder="Email"
             value={email}
             onIonChange={(e) => setEmail(e.detail.value!)}
-            className="login-input"
+            className="register-input"
           />
           <IonInput
             type="password"
             placeholder="Password"
             value={password}
             onIonChange={(e) => setPassword(e.detail.value!)}
-            className="login-input"
+            className="register-input"
           />
-          <IonButton onClick={handleLogin} className="login-button">Log in</IonButton>
-          <IonButton onClick={goToRegister} className="register-button" fill="clear">
-            Create Account
-          </IonButton>
+          <IonButton onClick={handleRegister} className="register-button">Register</IonButton>
           <IonLoading isOpen={loading} />
         </div>
       </IonContent>
@@ -75,4 +67,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
