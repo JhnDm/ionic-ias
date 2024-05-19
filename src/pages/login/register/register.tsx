@@ -1,7 +1,7 @@
 // Register.tsx
 
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonInput, IonButton, IonLoading, IonHeader, IonToolbar, IonTitle } from '@ionic/react';
+import { IonButtons, IonContent, IonPage, IonInput, IonButton, IonLoading, IonHeader, IonToolbar, IonTitle, IonBackButton } from '@ionic/react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -40,6 +40,9 @@ const Register = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar className="toolbar-skyblue">
+        <IonButtons slot='start'>
+              <IonBackButton defaultHref='/home'/>
+           </IonButtons>
           <IonTitle>Register</IonTitle>
         </IonToolbar>
       </IonHeader>
