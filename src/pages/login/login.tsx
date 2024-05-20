@@ -40,16 +40,17 @@ const Login = () => {
   const goToRegister = () => {
     router.push('/register'); // Navigate to the register page
   };
+  const goToForgotPassword = () => {
+  };
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar className="toolbar-skyblue">
-          <IonTitle>Login</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent>
         <div className="login-container">
+          <h2 className="welcome-title">Welcome back!</h2>
+          <br />
+          <br />
+          <br />
           <IonInput
             type="email"
             placeholder="Email"
@@ -65,8 +66,16 @@ const Login = () => {
             className="login-input"
           />
           <IonButton onClick={handleLogin} className="login-button">LOGIN</IonButton>
+          <IonButton onClick={goToForgotPassword} className="forgot-password-button" fill="clear">
+            Forgot Password?
+          </IonButton>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <IonButton onClick={goToRegister} className="register-button" fill="clear">
-            Create Account
+            Don't have an account? Sign up
           </IonButton>
           <IonLoading isOpen={loading} />
         </div>

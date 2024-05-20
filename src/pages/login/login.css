@@ -1,4 +1,8 @@
-/* Login.css */
+/* login.css */
+
+.toolbar-skyblue {
+  --background: skyblue;
+}
 
 .login-container {
   display: flex;
@@ -9,12 +13,34 @@
   padding: 0 20px; /* Optional: Add some padding for smaller screens */
 }
 
+.welcome-title {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
 .login-input {
   margin-bottom: 10px;
   width: 100%; /* Adjust width for a better fit within the container */
+  border: 1px solid #ccc; /* Add a 1px solid border with a light gray color */
+  border-radius: 4px; /* Add a slight rounded corner to the input field */
+  padding: 10px; /* Add some padding to the input field */
 }
 
-.login-button {
+.login-button, .forgot-password-button, .register-button {
   width: 100%; /* Adjust width for a better fit within the container */
   margin-top: 20px;
+  text-transform: none;
+}
+
+.forgot-password-button, .register-button {
+  font-size: 0.9em; /* Optional: Adjust font size for smaller text */
+}
+.register-button {
+  font-size: 0.9em; /* Optional: Adjust font size for smaller text */
+  color: #333; /* Set the text color to black */
+}
+
+.register-button span {
+  color: blue; /* Set the "Sign up" text color to a blue color (you can adjust this to your liking) */
 }
