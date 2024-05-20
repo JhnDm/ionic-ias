@@ -1,58 +1,51 @@
-// Register.tsx
-
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonInput, IonButton, IonLoading, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton } from '@ionic/react';
+import { IonContent, IonPage, IonInput, IonButton, IonLoading, IonTitle } from '@ionic/react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useHistory } from 'react-router-dom'; // Import useHistory from React Router
+import { useHistory } from 'react-router-dom';
+import { useIonRouter } from '@ionic/react';
 
-import './register.css'; // Import CSS file
+import '../register/register.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAfME1q9QAVkcb7E8KJ4qMiKjDtN7HDwjw",
   authDomain: "loginform-domo.firebaseapp.com",
-   projectId: "loginform-domo",
-   storageBucket: "loginform-domo.appspot.com",
-    messagingSenderId: "555716568828",
-    appId: "1:555716568828:web:fae15f857d28ecf3ad1979",
-   measurementId: "G-BBE14VL2N0"
-
+  projectId: "loginform-domo",
+  storageBucket: "loginform-domo.appspot.com",
+  messagingSenderId: "555716568828",
+  appId: "1:555716568828:web:fae15f857d28ecf3ad1979",
+  measurementId: "G-BBE14VL2N0"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
 const Register = () => {
+  const router = useIonRouter(); // Initialize useIonRouter hook
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const history = useHistory(); // Initialize useHistory hook
 
   const handleRegister = async () => {
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      // Handle successful registration
-      history.push('/login'); // Redirect to login page
     } catch (error) {
       console.error(error);
     }
     setLoading(false);
   };
 
+  const goToLogin = () => {
+    router.push('/login'); // Navigate to the login page
+  };
+
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar className="toolbar-skyblue">
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/login" />
-          </IonButtons>
-          <IonTitle>Register</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent>
         <div className="register-container">
+          <IonTitle className="register-title">Sign Up</IonTitle>
           <IonInput
             type="text"
             placeholder="Name"
@@ -74,7 +67,15 @@ const Register = () => {
             onIonChange={(e) => setPassword(e.detail.value!)}
             className="register-input"
           />
-          <IonButton onClick={handleRegister} className="register-button">SIGN IN</IonButton>
+          <IonButton onClick={handleRegister} className="register-button">SIGN UP</IonButton>
+          <IonButton onClick={goToLogin} className="login-button" fill="clear">
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+            Already have an account? Log in
+          </IonButton>
           <IonLoading isOpen={loading} />
         </div>
       </IonContent>

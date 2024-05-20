@@ -27,10 +27,11 @@
   padding: 10px; /* Add some padding to the input field */
 }
 
-.login-button, .forgot-password-button, .register-button {
+.login-button, .forgot-password-button {
   width: 100%; /* Adjust width for a better fit within the container */
   margin-top: 20px;
   text-transform: none;
+  color: white;
 }
 
 .forgot-password-button, .register-button {
@@ -42,5 +43,5 @@
 }
 
 .register-button span {
-  color: blue; /* Set the "Sign up" text color to a blue color (you can adjust this to your liking) */
+  color: #007bff; /* Set the "Sign up" text color to a blue color (you can adjust this to your liking) */
 }
