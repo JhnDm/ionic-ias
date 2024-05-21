@@ -4,8 +4,8 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
-import Login from './pages/login/login';
-import Register from './pages/register/register'
+import Login from './pages/login';
+import signup from './pages/signup'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -25,6 +25,8 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import TodoListApp from './pages/Home';
+import { signInWithPhoneNumber } from 'firebase/auth';
 
 setupIonicReact();
 
@@ -32,9 +34,9 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route path="/home" component={Home} exact />
+        <Route path="/Home" component={TodoListApp} exact />
         <Route path="/login" component={Login} exact />
-        <Route path="/register" component={Register} exact={true} />
+        <Route path="/signup" component={signup} exact={true} />
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
