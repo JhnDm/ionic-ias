@@ -1,91 +1,185 @@
+// Import statements...
 import React, { useState, useEffect } from 'react';
-import {IonApp,IonHeader,IonToolbar,IonTitle,IonContent,IonList,IonItem,IonLabel,IonCheckbox,IonInput,IonButton,IonBackButton,IonButtons,} from '@ionic/react';
-import { collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonButton, IonList, IonAlert, IonIcon } from '@ionic/react';
 import { signOut } from 'firebase/auth';
 import { auth, db } from './firebase';
 import { useHistory } from 'react-router-dom';
+import { trash, create } from 'ionicons/icons'; 
+import './home.css'; 
+import { collection, addDoc, query, onSnapshot, where, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 
-interface Todo {
+interface ToDoItem {
   id: string;
   text: string;
-  completed: boolean;
 }
 
-const TodoListApp: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState<string>('');
+const ToDoList: React.FC = () => {
+  const [text, setText] = useState<string>('');
+  const [todos, setTodos] = useState<ToDoItem[]>([]);
+  const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<string | null>(null);
+  const [editedText, setEditedText] = useState<string>('');
+  const [userName, setUserName] = useState<string>("");
   const history = useHistory();
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'todos'), (snapshot) => {
-      setTodos(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Todo)));
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (!user) {
+        // User is not logged in, redirect to login page
+        history.push('/login');
+      } else {
+        // Fetch todos for the logged-in user
+        fetchToDos(user.uid);
+        // Fetch user name
+        fetchUserName(user.uid);
+      }
     });
 
-    return () => unsubscribe();
-  }, []);
+    return unsubscribe;
+  }, [history]);
 
-  const addTodo = async () => {
-    if (newTodo.trim() !== '') {
-      const docRef = await addDoc(collection(db, 'todos'), { text: newTodo, completed: false });
-      setNewTodo('');
+  const fetchToDos = async (userId: string) => {
+    const q = query(collection(db, 'todos'), where('userId', '==', userId));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const todosList: ToDoItem[] = [];
+      querySnapshot.forEach((doc) => {
+        todosList.push({ id: doc.id, text: doc.data().text });
+      });
+      setTodos(todosList);
+    });
+    return unsubscribe;
+  };
+
+  const fetchUserName = async (userId: string) => {
+    try {
+      const userDocRef = doc(db, 'users', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        setUserName(userData.name);
+      }
+    } catch (error) {
+      console.error('Error fetching user name: ', error);
     }
   };
 
-  const toggleTodo = async (id: string) => {
-    const todoRef = doc(db, 'todos', id);
-    await updateDoc(todoRef, { completed: !todos.find(todo => todo.id === id)?.completed });
+  const handleAddToDo = async () => {
+    if (text.trim() === '') return;
+
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const docRef = await addDoc(collection(db, 'todos'), { text, userId: user.uid });
+        setTodos([...todos, { id: docRef.id, text }]);
+        setText('');
+      }
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
   };
 
-  const deleteTodo = async (id: string) => {
-    const todoRef = doc(db, 'todos', id);
-    await deleteDoc(todoRef);
+  const handleDeleteToDo = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'todos', id));
+      setTodos(todos.filter(todo => todo.id !== id));
+    } catch (error) {
+      console.error('Error deleting document: ', error);
+    }
   };
 
-  const handleBack = () => {
-    history.push('/home');
+  const handleEditToDo = async (id: string, text: string) => {
+    setEditMode(id);
+    setEditedText(text);
+  };
+
+  const handleSaveEditedToDo = async (id: string) => {
+    try {
+      await updateDoc(doc(db, 'todos', id), { text: editedText });
+      setEditMode(null);
+      setEditedText('');
+      fetchToDos(auth.currentUser!.uid); 
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      history.push('/login');
+    } catch (error) {
+      console.error('Error logging out: ', error);
+    }
   };
 
   return (
-    <IonApp>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
-        <IonButtons slot='start'>
-              <IonBackButton defaultHref='/home'/>
-           </IonButtons>
-          <IonTitle>To-Do List</IonTitle>
+          <IonTitle>ToDo List</IonTitle>
+          <IonButton slot="end" onClick={() => setShowLogoutAlert(true)} className="custom-button">Logout</IonButton>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <br />
-        <br />
-        <br />
+      <IonContent className="ion-padding">
         <IonItem>
+          <IonLabel position="stacked">New ToDo</IonLabel>
           <IonInput
-            placeholder="Enter a new todo"
-            value={newTodo}
-            onIonChange={(e) => setNewTodo(e.detail.value!)}
+            value={text}
+            onIonChange={(e) => setText(e.detail.value!)}
+            placeholder="Enter ToDo item"
           />
-          <IonButton slot="end" onClick={addTodo}>Add</IonButton>
         </IonItem>
-        <br />
+        <IonButton expand="block" onClick={handleAddToDo} className="custom-button">Add ToDo</IonButton>
         <IonList>
-          {todos.map((todo) => (
+          {todos.map(todo => (
             <IonItem key={todo.id}>
-              <IonCheckbox
-                slot="start"
-                checked={todo.completed}
-                onIonChange={() => toggleTodo(todo.id)}
-              />
-              <IonLabel style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                {todo.text}
-              </IonLabel>
-              <IonButton slot="end" onClick={() => deleteTodo(todo.id)}>Delete</IonButton>
+              {editMode === todo.id ? (
+                <>
+                  <IonInput
+                    value={editedText}
+                    placeholder="Edit ToDo"
+                    onIonChange={(e) => setEditedText(e.detail.value!)}
+                  />
+                  <IonButton slot="end" onClick={() => handleSaveEditedToDo(todo.id)} className="custom-button">Save</IonButton>
+                </>
+              ) : (
+                <>
+                  <IonLabel>{todo.text}</IonLabel>
+                  <IonButton slot="end" onClick={() => handleEditToDo(todo.id, todo.text)} className="custom-button">
+                    <IonIcon icon={create} />
+                  </IonButton>
+                  <IonButton slot="end" onClick={() => handleDeleteToDo(todo.id)} className="custom-button">
+                    <IonIcon icon={trash} />
+                  </IonButton>
+                </>
+              )}
             </IonItem>
           ))}
         </IonList>
       </IonContent>
-    </IonApp>
+      <IonAlert
+        isOpen={showLogoutAlert}
+        onDidDismiss={() => setShowLogoutAlert(false)}
+        header={`Confirm Logout`}
+        message={`Are you sure you want to logout, ${userName}?`}
+        buttons={[
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              setShowLogoutAlert(false);
+            }
+          },
+          {
+            text: 'exit',
+            handler: handleLogout,
+            cssClass: 'custom-button-blue'
+          }
+        ]}
+      />
+
+    </IonPage>
   );
 };
 
-export default TodoListApp;
+export default ToDoList;

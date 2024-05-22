@@ -3,7 +3,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import TodoList from './pages/home';
 import Login from './pages/login';
 import signup from './pages/signup'
 
@@ -25,7 +25,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import TodoListApp from './pages/Home';
+import TodoListApp from './pages/home';
 import { signInWithPhoneNumber } from 'firebase/auth';
 
 setupIonicReact();
