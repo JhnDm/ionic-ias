@@ -1,0 +1,58 @@
+/* home.css */
+
+.ion-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .ion-input {
+    --border-color: #ccc;
+    --border-width: 1px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .custom-button {
+    width: auto;
+    align-self: flex-end;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .custom-button:hover {
+    background-color: #3171e0;
+  }
+  
+  .custom-button-blue {
+    background-color: #3880ff;
+    color: white;
+  }
+  
+  .custom-button-blue:hover {
+    background-color: #3171e0;
+  }
+  

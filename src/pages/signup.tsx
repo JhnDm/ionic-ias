@@ -1,13 +1,12 @@
-// src/SignUp.tsx
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonButton, IonAlert } from '@ionic/react';
+import { IonContent, IonPage, IonInput, IonItem, IonLabel, IonButton, IonAlert } from '@ionic/react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import { auth, db } from './firebase';
-import './signup.css'; // Import the CSS file
+import './styles.css'; // Import the consolidated CSS file
 
-const signup: React.FC = () => {
+const Signup: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -21,16 +20,15 @@ const signup: React.FC = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-  
-      // Store user data in Firestore
+
       const userDocRef = doc(db, 'users', user.uid);
       await setDoc(userDocRef, {
         uid: user.uid,
         name: name,
         email: user.email,
       });
-  
-      setAlertMessage(`Congrats! Account created successfully. Welcome ${name}`);
+
+      setAlertMessage(`Account created successfully!`);
       setShowAlert(true);
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
@@ -45,7 +43,7 @@ const signup: React.FC = () => {
 
   const handleAlertDismiss = () => {
     setShowAlert(false);
-    if (alertMessage === 'Congrats! Account created successfully. Welcome ' + name) {
+    if (alertMessage === 'Account created successfully. Welcome ' + name) {
       history.push('/home');
     }
   };
@@ -57,50 +55,60 @@ const signup: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding">
-        <div className="welcome-container">
+        <br />
+        <br />
+        <br />
+        <br />
+        <div className="container">
           <h1 className="welcome-text">Sign Up</h1>
-        </div>
-        <IonItem>
-          <IonLabel position="stacked">Name</IonLabel>
-          <IonInput
-            value={name}
-            type="text"
-            onIonChange={(e) => setName(e.detail.value!)}
+          <IonItem>
+            <IonLabel position="stacked">Name</IonLabel>
+            <br />
+            <IonInput
+              value={name}
+              type="text"
+              onIonChange={(e) => setName(e.detail.value!)}
+              className="ion-input"
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Email</IonLabel>
+            <br />
+            <IonInput
+              value={email}
+              type="email"
+              onIonChange={(e) => setEmail(e.detail.value!)}
+              className="ion-input"
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Password</IonLabel>
+            <br />
+            <IonInput
+              value={password}
+              type="password"
+              onIonChange={(e) => setPassword(e.detail.value!)}
+              className="ion-input"
+            />
+          </IonItem>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <div className="button-group">
+            <IonButton className="button" onClick={handleSignUp}>Sign Up</IonButton>
+          </div>
+          <div className="text">
+            Already have an account? <span onClick={handleLogin}>Login</span>
+          </div>
+          <IonAlert
+            isOpen={showAlert}
+            onDidDismiss={handleAlertDismiss}
+            header={'Alert'}
+            message={alertMessage}
+            buttons={['OK']}
           />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Email</IonLabel>
-          <IonInput
-            value={email}
-            type="email"
-            onIonChange={(e) => setEmail(e.detail.value!)}
-          />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Password</IonLabel>
-          <IonInput
-            value={password}
-            type="password"
-            onIonChange={(e) => setPassword(e.detail.value!)}
-          />
-        </IonItem>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div className="button-group">
-          <IonButton className="signup-button" onClick={handleSignUp}>Sign Up</IonButton>
         </div>
-        <div className="signup-text">
-          Already have an account? <span onClick={handleLogin}>Login</span>
-        </div>
-        <IonAlert
-          isOpen={showAlert}
-          onDidDismiss={handleAlertDismiss}
-          header={'Alert'}
-          message={alertMessage}
-          buttons={['OK']}
-        />
       </IonContent>
     </IonPage>
   );
 };
 
-export default signup;
+export default Signup;

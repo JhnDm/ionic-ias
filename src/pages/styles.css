@@ -1,0 +1,59 @@
+/* Common styles for login and signup pages */
+.ion-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    margin: auto;
+  }
+  
+  .welcome-text {
+    margin-bottom: 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .ion-item {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .ion-input {
+    --border-color: black;
+    --border-width: 2px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .button-group {
+    margin-top: 20px;
+  }
+  
+  .button {
+    width: 100%;
+  }
+  
+  .text {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .text span {
+    color: #3880ff;
+    cursor: pointer;
+  }
+  

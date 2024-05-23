@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonInput,
   IonItem,
   IonLabel,
@@ -15,41 +12,32 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { useHistory } from "react-router-dom";
-import "./login.css"; // Import the CSS file
-
+import "./styles.css"; // Import the consolidated CSS file
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null); // State for welcome message
+  const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const history = useHistory();
 
   const handleLogin = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check if user exists in Firestore
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        // User exists, navigate to home page
         const userData = docSnap.data();
-        setWelcomeMessage(`Welcome ${userData.name}`);
+        setWelcomeMessage(`Welcome!`);
         setShowAlert(true);
-        // Redirect to home page after showing the alert
         setTimeout(() => {
           history.push("/home");
-        }, 3000); // Redirect after 3 seconds
+        }, 3000);
       } else {
-        // User does not exist, show alert
         setShowAlert(true);
       }
     } catch (error: any) {
@@ -64,35 +52,41 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding">
-        <div className="welcome-container">
+        <br />
+        <br />
+        <br />
+        <br />
+        <div className="container">
           <h1 className="welcome-text">Welcome!</h1>
-        </div>
-        <div className="centered-content">
           <IonItem>
+            <IonLabel position="stacked">Email</IonLabel>
+            <br />
             <IonInput
-              placeholder="Email"
+              placeholder=""
               value={email}
               type="email"
               onIonChange={(e) => setEmail(e.detail.value!)}
-              className="outlined-input"
+              className="ion-input"
             />
           </IonItem>
           <IonItem>
+            <IonLabel position="stacked">Password</IonLabel>
+            <br />
             <IonInput
-              placeholder="Password"
+              placeholder=""
               value={password}
               type="password"
               onIonChange={(e) => setPassword(e.detail.value!)}
-              className="outlined-input"
+              className="ion-input"
             />
           </IonItem>
           {error && <p style={{ color: "red" }}>{error}</p>}
           <div className="button-group">
-            <IonButton className="login-button" onClick={handleLogin}>
+            <IonButton className="button" onClick={handleLogin}>
               Login
             </IonButton>
           </div>
-          <div className="signup-text">
+          <div className="text">
             Don't have an account? <span onClick={handleSignup}>Sign Up</span>
           </div>
         </div>
@@ -100,7 +94,7 @@ const Login: React.FC = () => {
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
           header={"Alert"}
-          message={welcomeMessage || "User does not exist"} 
+          message={welcomeMessage || "User does not exist"}
           buttons={["OK"]}
         />
       </IonContent>

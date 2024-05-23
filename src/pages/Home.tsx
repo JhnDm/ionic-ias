@@ -4,7 +4,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem
 import { signOut } from 'firebase/auth';
 import { auth, db } from './firebase';
 import { useHistory } from 'react-router-dom';
-import { trash, create } from 'ionicons/icons'; 
+import { trash, create, exit } from 'ionicons/icons'; 
 import './home.css'; 
 import { collection, addDoc, query, onSnapshot, where, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 
@@ -117,7 +117,7 @@ const ToDoList: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>ToDo List</IonTitle>
-          <IonButton slot="end" onClick={() => setShowLogoutAlert(true)} className="custom-button">Logout</IonButton>
+          <IonButton slot="end" onClick={() => setShowLogoutAlert(true)} className="custom-button"><IonIcon icon={exit} /></IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
@@ -161,7 +161,7 @@ const ToDoList: React.FC = () => {
         isOpen={showLogoutAlert}
         onDidDismiss={() => setShowLogoutAlert(false)}
         header={`Confirm Logout`}
-        message={`Are you sure you want to logout, ${userName}?`}
+        message={`Are you sure you want to logout?`}
         buttons={[
           {
             text: 'Cancel',
@@ -171,7 +171,7 @@ const ToDoList: React.FC = () => {
             }
           },
           {
-            text: 'exit',
+            text: 'Yes',
             handler: handleLogout,
             cssClass: 'custom-button-blue'
           }
