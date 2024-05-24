@@ -95,7 +95,7 @@ const Signup: React.FC = () => {
           </IonItem>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className="button-group">
-            <IonButton className="button" onClick={handleSignUp}>Sign Up</IonButton>
+            <IonButton className="button" onClick={handleSignUp}>Submit</IonButton>
           </div>
           <div className="text">
             Already have an account? <span onClick={handleLogin}>Login</span>
