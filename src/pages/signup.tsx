@@ -59,6 +59,8 @@ const Signup: React.FC = () => {
         <br />
         <br />
         <br />
+        <br />
+        <br />
         <div className="container">
           <h1 className="welcome-text">Sign Up</h1>
           <IonItem>

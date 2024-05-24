@@ -56,6 +56,8 @@ const Login: React.FC = () => {
         <br />
         <br />
         <br />
+        <br />
+        <br />
         <div className="container">
           <h1 className="welcome-text">Welcome!</h1>
           <IonItem>
@@ -82,7 +84,7 @@ const Login: React.FC = () => {
           </IonItem>
           {error && <p style={{ color: "red" }}>{error}</p>}
           <div className="button-group">
-            <IonButton className="button" onClick={handleLogin}>
+            <IonButton className="block-button" onClick={handleLogin}>
               Login
             </IonButton>
           </div>

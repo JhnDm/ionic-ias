@@ -56,4 +56,9 @@
     color: #3880ff;
     cursor: pointer;
   }
+  .block-button {
+    display: block;
+    width: auto; /* or you can specify a fixed width */
+    margin: 0 auto; /* optionally center the button */
+  }
   
